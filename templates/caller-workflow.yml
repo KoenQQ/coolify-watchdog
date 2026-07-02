@@ -1,0 +1,41 @@
+# Coolify error watchdog — thin caller.
+#
+# Drop this file into .github/workflows/coolify-watchdog.yml of any repo whose
+# app runs on the Coolify instance. The engine (log parsing + Claude analysis)
+# lives in KoenQQ/coolify-watchdog and is maintained in one place.
+#
+# Required repo configuration (Settings -> Secrets and variables -> Actions):
+#   Secrets:   COOLIFY_API_TOKEN, and ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN
+#              ENGINE_REPO_TOKEN (fine-grained PAT with read access to
+#              KoenQQ/coolify-watchdog — only needed while that repo is private)
+#   Variables: COOLIFY_API_URL   e.g. https://apps.pompadour.ventures
+#              COOLIFY_APPS      e.g. [{"name":"backend","uuid":"<coolify-app-uuid>"}]
+
+name: Coolify Error Watchdog
+
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only report errors — do not run Claude or open PRs"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  watchdog:
+    uses: KoenQQ/coolify-watchdog/.github/workflows/coolify-watchdog.yml@main
+    with:
+      dry_run: ${{ inputs.dry_run == true }}
+      coolify_api_url: ${{ vars.COOLIFY_API_URL }}
+      coolify_apps: ${{ vars.COOLIFY_APPS }}
+    secrets:
+      COOLIFY_API_TOKEN: ${{ secrets.COOLIFY_API_TOKEN }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      ENGINE_REPO_TOKEN: ${{ secrets.ENGINE_REPO_TOKEN }}

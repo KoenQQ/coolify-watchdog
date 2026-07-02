@@ -1,0 +1,3 @@
+# Coolify watchdog ignore list.
+# One fingerprint per line (the 10-char hex id from the watchdog PR title/branch).
+# Errors listed here are never reported again. Lines starting with # are comments.
