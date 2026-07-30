@@ -59,6 +59,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write # required by claude-code-action@v1; the engine cannot add it back
 
 jobs:
   watchdog:
