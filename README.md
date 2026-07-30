@@ -78,6 +78,17 @@ Either run the `setup-coolify-watchdog` Claude Code skill (copy
   excerpts are treated as untrusted data — the prompt forbids following
   instructions embedded in them.
 
+## Morning report (optional)
+
+`skills/coolify-morning-report/` turns the watchdog's outputs into a daily
+plain-language briefing: it discovers every watchdog-enabled repo, reads last
+night's runs and new `log-watchdog` PRs, and explains what broke, why, and
+what needs a decision. Designed as the prompt of a scheduled daily chat
+(e.g. 05:30 UTC, after the nightly runs). It reads only GitHub — no Coolify
+or Anthropic credentials needed. Install locally by copying the skill dir to
+`~/.claude/skills/`, or reference the skill file by URL from a scheduled
+cloud session.
+
 ## Costs (per project)
 
 - **Quiet night:** ~1 min of GitHub Actions, zero Claude usage
